@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "hexlet-code"
+version = "0.1.0"
+description = ""
+authors = ["Ivan Dmitriev <dmitrievivan434@gmail.com>"]
+readme = "README.md"
+packages = [{include = "task_manager"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.2.2"
+python-dotenv = "^1.0.0"
+dj-database-url = "^2.0.0"
+gunicorn = "^20.1.0"
+psycopg2-binary = "^2.9.6"
+django-bootstrap4 = "^23.1"
+django-extensions = "^3.2.3"
+django-filter = "^23.2"
+rollbar = "^0.16.3"
+pytest = "^7.4.2"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+ipython = "^8.14.0"
+coverage = "^7.2.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

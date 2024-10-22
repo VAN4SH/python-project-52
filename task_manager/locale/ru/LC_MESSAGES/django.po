@@ -296,7 +296,6 @@ msgid "User is successfully deleted"
 msgstr "Пользователь успешно удален"
 
 #: task_manager/users/views.py:55
-#, fuzzy
 msgid "You have no rights to delete another user."
 msgstr "У вас нет прав для удаления другого пользователя."
 

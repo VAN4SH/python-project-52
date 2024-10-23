@@ -83,7 +83,7 @@ class UserCrudTestCase(TestCase):
         response = self.client.post(request_url, {}, follow=True)
         self.assertContains(
             response,
-            _('У вас нет прав для изменения другого пользователя.'),
+            _('You have no rights to delete anthoer user.'),
             status_code=200
         )
 

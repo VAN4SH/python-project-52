@@ -44,7 +44,7 @@ class UserCrudTestCase(TestCase):
         self.client.force_login(user2)
         response = self.client.get(request_url, follow=True)
         self.assertContains(
-            response, _("You have no rights to change another user."), status_code=200
+            response, _("У вас нет прав для изменения."), status_code=200
         )
 
     def test_update_user_successfully(self):
@@ -78,7 +78,7 @@ class UserCrudTestCase(TestCase):
         self.client.force_login(user2)
         response = self.client.post(request_url, {}, follow=True)
         self.assertContains(
-            response, _("You have no rights to delete another user."), status_code=200
+            response, _("У вас нет прав для удаления."), status_code=200
         )
 
     def test_delete_user_successfully(self):

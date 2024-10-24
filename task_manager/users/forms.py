@@ -5,8 +5,8 @@ from .models import MyUser
 
 class UserCreateForm(UserCreationForm):
 
-    def init(self, *args, **kwargs):
-        super().init(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields['last_name'].required = True
         self.fields['first_name'].requred = True
 

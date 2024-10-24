@@ -19,6 +19,7 @@ class UserLoginView(SuccessMessageMixin, LoginView):
         "button_text": _("Enter"),
     }
     success_message = _("You are logged in")
+    next_page = '/'
 
 
 class UserLogoutView(LogoutView):

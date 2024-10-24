@@ -8,17 +8,23 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, "home.html")
 
 
 class UserLoginView(SuccessMessageMixin, LoginView):
-    template_name = 'form.html'
-    success_message = _('You are logged in')
+    template_name = "form.html"
+    form_class = AuthenticationForm
+    next_page = reverse_lazy("home")
+    extra_context = {
+        "header": _("Login"),
+        "button_text": _("Enter"),
+    }
+    success_message = _("You are logged in")
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy('home')
+    next_page = reverse_lazy("home")
 
     def dispatch(self, request, *args, **kwargs):
-        messages.info(request, _('You are logged out'))
+        messages.info(request, _("You are logged out"))
         return super().dispatch(request, *args, **kwargs)

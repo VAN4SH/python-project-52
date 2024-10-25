@@ -13,7 +13,6 @@ def home(request):
 
 class UserLoginView(SuccessMessageMixin, LoginView):
     template_name = "form.html"
-    form_class = AuthenticationForm
     success_message = _("You are logged in")
 
 

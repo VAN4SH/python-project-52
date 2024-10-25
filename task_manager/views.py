@@ -15,6 +15,12 @@ class UserLoginView(SuccessMessageMixin, LoginView):
     template_name = "form.html"
     success_message = _("You are logged in")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["header"] = _("Login")
+        context["button_text"] = _("Enter")
+        return context
+
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy("home")

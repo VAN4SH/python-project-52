@@ -14,11 +14,6 @@ def home(request):
 class UserLoginView(SuccessMessageMixin, LoginView):
     template_name = "form.html"
     form_class = AuthenticationForm
-    next_page = reverse_lazy("home")
-    extra_context = {
-        "header": _("Login"),
-        "button_text": _("Enter"),
-    }
     success_message = _("You are logged in")
 
 

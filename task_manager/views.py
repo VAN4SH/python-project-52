@@ -14,7 +14,6 @@ class HomePageView(TemplateView):
 class UserLoginView(SuccessMessageMixin, LoginView):
     template_name = "form.html"
     form_class = AuthenticationForm
-    success_url = reverse_lazy("home")
     extra_context = {
         "header": _("Login"),
         "button_text": _("Enter"),
@@ -23,8 +22,6 @@ class UserLoginView(SuccessMessageMixin, LoginView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy("home")
-
     def dispatch(self, request, *args, **kwargs):
         messages.info(request, _("You are logged out"))
         return super().dispatch(request, *args, **kwargs)

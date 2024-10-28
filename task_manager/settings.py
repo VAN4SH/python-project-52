@@ -93,6 +93,8 @@ TEMPLATES = [
 
 AUTH_USER_MODEL = 'users.MyUser'
 
+LOGIN_REDIRECT_URL = '/'
+
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 

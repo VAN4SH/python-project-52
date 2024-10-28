@@ -2,7 +2,6 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.translation import gettext_lazy as _
 from django.contrib.messages.views import SuccessMessageMixin
-
 from task_manager.mixins import (
     MyLoginRequiredMixin,
     SelfCheckUserMixin,
@@ -25,14 +24,14 @@ class HeaderButtonMixin:
         return context
 
 
-class UserListView(HeaderButtonMixin, ListView):
+class UserListView(ListView, HeaderButtonMixin):
     model = MyUser
     template_name = "users/list.html"
     context_object_name = "users"
     header = _("Users")
 
 
-class UserCreateView(HeaderButtonMixin, SuccessMessageMixin, CreateView):
+class UserCreateView(SuccessMessageMixin, CreateView, HeaderButtonMixin):
     model = MyUser
     form_class = UserCreateForm
     template_name = "form.html"
@@ -43,11 +42,11 @@ class UserCreateView(HeaderButtonMixin, SuccessMessageMixin, CreateView):
 
 
 class UserUpdateView(
-    HeaderButtonMixin,
     MyLoginRequiredMixin,
     SelfCheckUserMixin,
     SuccessMessageMixin,
     UpdateView,
+    HeaderButtonMixin,
 ):
     model = MyUser
     form_class = UserUpdateForm
@@ -61,12 +60,12 @@ class UserUpdateView(
 
 
 class UserDeleteView(
-    HeaderButtonMixin,
     MyLoginRequiredMixin,
     SelfCheckUserMixin,
     CanDeleteProtectedEntityMixin,
     SuccessMessageMixin,
     DeleteView,
+    HeaderButtonMixin,
 ):
     model = MyUser
     template_name = "delete.html"

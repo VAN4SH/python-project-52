@@ -2,6 +2,9 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.utils.translation import gettext_lazy as _
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
+from django.shortcuts import redirect
+from task_manager.tasks.models import Task
 
 from task_manager.mixins import (
     MyLoginRequiredMixin,
@@ -68,3 +71,14 @@ class UserDeleteView(
         "header": _("Deleting user"),
         "button_text": _("Yes, delete"),
     }
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if (
+            Task.objects.filter(author=self.object).exists()
+            or Task.objects.filter(executor=self.object).exists()
+        ):
+            messages.error(request, self.protected_message)
+            return redirect(self.protected_url)
+        else:
+            return super().delete(request, *args, **kwargs)

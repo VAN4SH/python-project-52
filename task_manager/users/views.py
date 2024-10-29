@@ -27,10 +27,6 @@ class UserCreateView(SuccessMessageMixin, CreateView):
     template_name = "form.html"
     success_url = reverse_lazy("login")
     success_message = _("User is created successfully")
-    extra_context = {
-        "header": _("Registration"),
-        "button_text": _("Register "),
-    }
 
 
 class UserUpdateView(
@@ -43,10 +39,6 @@ class UserUpdateView(
     success_message = _("User is successfully updated")
     permission_message = _("You have no rights to change another user.")
     permission_url = reverse_lazy("users")
-    extra_context = {
-        "header": _("Update user"),
-        "button_text": _("Update"),
-    }
 
 
 class UserDeleteView(

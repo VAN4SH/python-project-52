@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.db.models.deletion import ProtectedError
 from task_manager.mixins import MyLoginRequiredMixin
 from .models import Status
 from .forms import StatusForm
@@ -42,14 +43,14 @@ class StatusUpdateView(MyLoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    template_name = 'delete.html'
+    template_name = "delete.html"
     model = Status
-    success_url = reverse_lazy('statuses')
-    success_message = _('Status is successfully deleted')
-    error_message = _('Unable to delete a status because it is in use')
+    success_url = reverse_lazy("statuses")
+    success_message = _("Status is successfully deleted")
+    error_message = _("Unable to delete a status because it is in use")
     extra_context = {
-        'header': _('Delete status'),
-        'button_text': _('Yes, delete'),
+        "header": _("Delete status"),
+        "button_text": _("Yes, delete"),
     }
 
     def delete(self, request, *args, **kwargs):
@@ -57,5 +58,10 @@ class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
         if self.object.tasks.exists():
             messages.error(request, self.error_message)
             return redirect(self.success_url)
-        else:
-            return super().delete(request, *args, **kwargs)
+        try:
+            self.object.delete()
+            messages.success(request, self.success_message)
+            return redirect(self.success_url)
+        except ProtectedError:
+            messages.error(request, self.error_message)
+            return redirect(self.success_url)

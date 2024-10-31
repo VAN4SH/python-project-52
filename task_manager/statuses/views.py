@@ -7,7 +7,7 @@ from task_manager.mixins import MyLoginRequiredMixin
 from .models import Status
 from .forms import StatusForm
 from task_manager.tasks.models import Task
-from django.db.models.deletion import ProtectedError
+from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 
@@ -44,22 +44,24 @@ class StatusUpdateView(MyLoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    template_name = "delete.html"
+    template_name = 'delete.html'
     model = Status
-    success_url = reverse_lazy("statuses")
-    success_message = _("Status is successfully deleted")
+    success_url = reverse_lazy('statuses')
+    success_message = _('Статус успешно удалён')
     extra_context = {
-        "header": _("Delete status"),
-        "button_text": _("Yes, delete"),
+        'header': _('Удаление статуса'),
+        'button_text': _('Да, удалить'),
     }
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        success_url = self.get_success_url()
         try:
             self.object.delete()
             messages.success(self.request, self.success_message)
-            return HttpResponseRedirect(success_url)
+            return HttpResponseRedirect(self.success_url)
         except ProtectedError:
-            messages.error(request, _("Unable to delete a status because it is in use"))
-            return redirect("statuses")
+            messages.error(
+                request,
+                _('Unable to delete a status because it is in use'))
+            return redirect('statuses')
+

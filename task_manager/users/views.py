@@ -8,7 +8,6 @@ from task_manager.tasks.models import Task
 from task_manager.mixins import (
     MyLoginRequiredMixin,
     SelfCheckUserMixin,
-    CanDeleteProtectedEntityMixin,
 )
 from .models import MyUser
 from .forms import UserCreateForm, UserUpdateForm
@@ -54,7 +53,6 @@ class UserUpdateView(
 class UserDeleteView(
     MyLoginRequiredMixin,
     SelfCheckUserMixin,
-    CanDeleteProtectedEntityMixin,
     SuccessMessageMixin,
     DeleteView,
 ):
@@ -64,8 +62,6 @@ class UserDeleteView(
     success_message = _("User is successfully deleted")
     permission_message = _("You have no rights to change another user.")
     permission_url = reverse_lazy("users")
-    protected_message = _("Unable to delete a user because he is in use")
-    protected_url = reverse_lazy("users")
     extra_context = {
         "header": _("Deleting user"),
         "button_text": _("Yes, delete"),
@@ -77,7 +73,7 @@ class UserDeleteView(
             Task.objects.filter(author=self.object).exists()
             or Task.objects.filter(executor=self.object).exists()
         ):
-            messages.error(request, self.protected_message)
-            return redirect(self.protected_url)
+            messages.error(request, _("Unable to delete a user because they are in use"))
+            return redirect(reverse_lazy("users"))
         else:
             return super().delete(request, *args, **kwargs)

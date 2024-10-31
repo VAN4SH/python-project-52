@@ -5,6 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.db.models.deletion import ProtectedError
+from django.http import HttpResponseRedirect
 from task_manager.mixins import MyLoginRequiredMixin
 from .models import Status
 from .forms import StatusForm
@@ -55,13 +56,10 @@ class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self.object.tasks.exists():
-            messages.error(request, self.error_message)
-            return redirect(self.success_url)
         try:
-            self.object.delete()
+            response = super().delete(request, *args, **kwargs)
             messages.success(request, self.success_message)
-            return redirect(self.success_url)
+            return response
         except ProtectedError:
             messages.error(request, self.error_message)
             return redirect(self.success_url)

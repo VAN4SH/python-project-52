@@ -54,8 +54,8 @@ class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     }
 
     def delete(self, request, *args, **kwargs):
-        status = self.get_object()
-        if Task.objects.filter(statuses=status):
+        self.object = self.get_object()
+        if Task.objects.filter(status=self.object).exists():
             messages.error(request, self.protected_message)
             return redirect(self.protected_url)
         else:

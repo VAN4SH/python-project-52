@@ -48,18 +48,17 @@ class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     model = Status
     success_url = reverse_lazy("statuses")
     success_message = _("Status is successfully deleted")
-    error_message = _("Unable to delete a status because it is in use")
     extra_context = {
         "header": _("Delete status"),
         "button_text": _("Yes, delete"),
     }
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        try:
-            response = super().delete(request, *args, **kwargs)
-            messages.success(request, self.success_message)
-            return response
-        except ProtectedError:
-            messages.error(request, self.error_message)
-            return redirect(self.success_url)
+   def post(self, request, *args, **kwargs):
+        status = self.get_object()
+        if Task.objects.filter(status_id=status.id):
+            messages.error(
+                request,
+                _("Unable to delete a status because it is in use"))
+            return redirect('statuses')
+        messages.success(self.request, self.success_message)
+        return super().delete(request, *args, **kwargs)

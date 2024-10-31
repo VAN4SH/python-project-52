@@ -8,6 +8,8 @@ from .models import Status
 from .forms import StatusForm
 from task_manager.tasks.models import Task
 from django.db.models.deletion import ProtectedError
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 
 
 class StatusListView(MyLoginRequiredMixin, ListView):
@@ -52,11 +54,12 @@ class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
     }
 
     def delete(self, request, *args, **kwargs):
-        status = self.get_object()
+        self.object = self.get_object()
+        success_url = self.get_success_url()
         try:
-            response = super().delete(request, *args, **kwargs)
+            self.object.delete()
             messages.success(self.request, self.success_message)
-            return response
+            return HttpResponseRedirect(success_url)
         except ProtectedError:
             messages.error(request, _("Unable to delete a status because it is in use"))
             return redirect("statuses")

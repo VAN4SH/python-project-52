@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.db import transaction
 from task_manager.mixins import MyLoginRequiredMixin
 from .models import Status
 from .forms import StatusForm
@@ -54,11 +53,8 @@ class StatusDeleteView(MyLoginRequiredMixin, SuccessMessageMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
-        with transaction.atomic():
-            if Task.objects.filter(status=self.object).exists():
-                messages.error(
-                    request, _("Unable to delete a status because it is in use")
-                )
-                return redirect(self.success_url)
-            else:
-                return super().delete(request, *args, **kwargs)
+        if Task.objects.filter(status=self.object).exists():
+            messages.error(request, _("Unable to delete a status because it is in use"))
+            return redirect(self.success_url)
+        else:
+            return super().delete(request, *args, **kwargs)

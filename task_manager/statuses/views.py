@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 
-from task_manager.mixins import MyLoginRequiredMixin, CanDeleteProtectedEntityMixin
+from task_manager.mixins import MyLoginRequiredMixin
 from .models import Status
 from task_manager.tasks.models import Task
 from .forms import StatusForm
@@ -43,7 +43,7 @@ class StatusUpdateView(MyLoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class StatusDeleteView(
-    MyLoginRequiredMixin, CanDeleteProtectedEntityMixin, SuccessMessageMixin, DeleteView
+    MyLoginRequiredMixin, SuccessMessageMixin, DeleteView
 ):
     template_name = "delete.html"
     model = Status

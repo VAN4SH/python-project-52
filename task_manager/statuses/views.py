@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from task_manager.mixins import MyLoginRequiredMixin
 from .models import Status
 from .forms import StatusForm
+from task_manager.tasks.models import Task
 
 
 class StatusListView(MyLoginRequiredMixin, ListView):
@@ -52,7 +53,7 @@ class StatusDeleteView(MyLoginRequiredMixin, DeleteView):
 
      def delete(self, request, *args, **kwargs):
            self.object = self.get_object()
-           if Status.objects.filter(status=self.object).exists():
+           if Task.objects.filter(status=self.object).exists():
                messages.error(request, _("Unable to delete the status because it is in use."))
                return redirect(self.success_url)
            else:

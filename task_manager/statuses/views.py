@@ -51,11 +51,6 @@ class StatusDeleteView(MyLoginRequiredMixin, DeleteView):
         "button_text": _("Yes, delete"),
     }
 
-    def form_valid(self, form):
-        messages.success(request=self.request,
-                         message=self.success_message)
-        return super(StatusDeleteView, self).form_valid(form)
-
     def post(self, request, *args, **kwargs):
         if self.get_object().status.all().exists():
             messages.error(self.request,

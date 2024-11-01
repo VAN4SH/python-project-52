@@ -41,7 +41,7 @@ class LabelUpdateView(MyLoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class LabelDeleteView(
-    MyLoginRequiredMixin, CanDeleteProtectedEntityMixin, SuccessMessageMixin, DeleteView
+    MyLoginRequiredMixin, SuccessMessageMixin, DeleteView
 ):
     template_name = "delete.html"
     model = Label

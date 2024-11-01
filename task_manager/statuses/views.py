@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from task_manager.mixins import MyLoginRequiredMixin
 from .models import Status
 from .forms import StatusForm
-from task_manager.tasks.models import Task
 
 
 class StatusListView(MyLoginRequiredMixin, ListView):

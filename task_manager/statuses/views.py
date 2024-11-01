@@ -52,7 +52,7 @@ class StatusDeleteView(MyLoginRequiredMixin, DeleteView):
     }
 
     def delete(self, request, *args, **kwargs):
-        if self.get_object().statuses.all().exists():
+        if Task.get_object().statuses.all().exists():
             messages.error(
                 request, _("Unable to delete the status because it is in use.")
             )

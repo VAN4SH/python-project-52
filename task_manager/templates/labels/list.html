@@ -1,40 +1,232 @@
 {% extends "base.html" %}
 
 {% load bootstrap4 %}
-{% load i18n %}
 
 {% block main %}
-    <h1 class="my-4">{{ header }}</h1>
+<div class="row">
+    <div class="col-12">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 fw-bold text-dark mb-1">{{ header }}</h1>
+                <p class="text-muted">Управление метками для категоризации задач</p>
+            </div>
+            <a href="{% url 'label_create' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>
+                Создать метку
+            </a>
+        </div>
 
-    <a class="nav-link" href="{% url 'label_create' %}">{% trans 'Create label' %}</a>
+        <!-- Labels Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4 border-0 fw-semibold text-muted small text-uppercase">ID</th>
+                                <th class="border-0 fw-semibold text-muted small text-uppercase">Имя</th>
+                                <th class="border-0 fw-semibold text-muted small text-uppercase">Дата создания</th>
+                                <th class="pe-4 border-0 fw-semibold text-muted small text-uppercase text-end">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if labels %}
+                                {% for label in labels %}
+                                    <tr class="border-bottom">
+                                        <td class="ps-4 fw-medium text-muted">
+                                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center me-3" 
+                                                 style="width: 36px; height: 36px;">
+                                                <span class="small fw-bold text-primary">#{{ label.id }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                                     style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-tag text-success"></i>
+                                                </div>
+                                                <div class="fw-medium text-dark">{{ label.name }}</div>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-calendar text-muted me-2"></i>
+                                                {{ label.date_created|date:"d.m.Y H:i" }}
+                                            </div>
+                                        </td>
+                                        <td class="pe-4 text-end">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a href="{% url 'label_update' label.id %}" class="btn btn-outline-primary btn-sm px-3">
+                                                    <i class="fas fa-edit me-1"></i>
+                                                    Изменить
+                                                </a>
+                                                <a href="{% url 'label_delete' label.id %}" class="btn btn-outline-danger btn-sm px-3">
+                                                    <i class="fas fa-trash me-1"></i>
+                                                    Удалить
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-5 text-muted">
+                                        <i class="fas fa-tags fa-3x mb-3 opacity-25"></i>
+                                        <p class="h5">Метки не найдены</p>
+                                        <p class="small">Создайте первую метку для организации задач</p>
+                                        <a href="{% url 'label_create' %}" class="btn btn-primary mt-3">
+                                            <i class="fas fa-plus-circle me-2"></i>
+                                            Создать метку
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>{% trans 'Name' %}</th>
-                <th>{% trans 'Creation date' %}</th>
-                <th></th>
-            </tr>
-        </thead>
+        <!-- Label Statistics -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 bg-light">
+                    <div class="card-body py-3">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <div class="h4 fw-bold text-primary mb-1">{{ labels|length }}</div>
+                                <div class="text-muted small">Всего меток</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="h4 fw-bold text-success mb-1">
+                                    {{ labels|length }}
+                                </div>
+                                <div class="text-muted small">Активные</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="h4 fw-bold text-info mb-1">
+                                    {{ labels|length }}
+                                </div>
+                                <div class="text-muted small">Используются</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <tbody>
-            {% if labels %}
-                {% for label in labels %}
-                    <tr>
-                        <td>{{ label.id }}</td>
-                        <td>{{ label.name }}</td>
-                        <td>{{ label.date_created|date:"d.m.Y H:i" }}</td>
-                        <td>
-                            <a href="{% url 'label_update' label.id %}" class="btn btn-sm btn-outline-dark py-0">
-                              {% translate 'Update' %}</a>
-                            <br>
-                            <a href="{% url 'label_delete' label.id %}" class="btn btn-sm btn-outline-dark mt-1 py-0">
-                              {% translate 'Delete' %}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+        <!-- Help Text -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 bg-primary bg-opacity-5">
+                    <div class="card-body p-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-primary fa-lg"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="card-title text-dark">О метках</h5>
+                                <p class="card-text text-muted mb-0">
+                                    Метки помогают категоризировать задачи по темам, приоритетам или другим критериям. Используйте метки для быстрой фильтрации и организации задач.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <p class="small text-muted mb-0">
+                Показано {{ page_obj.start_index }} - {{ page_obj.end_index }} из {{ page_obj.paginator.count }} меток
+            </p>
+            <nav>
+                <ul class="pagination mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.table th {
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+.table td {
+    border-bottom: 1px solid #f8f9fa;
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.btn-group .btn {
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.bg-opacity-10 {
+    opacity: 0.1;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.page-link {
+    border-radius: 6px;
+    margin: 0 2px;
+    border: 1px solid #e9ecef;
+    color: #495057;
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    border-color: #4361ee;
+}
+
+.bg-primary.bg-opacity-5 {
+    background-color: rgba(67, 97, 238, 0.05) !important;
+}
+</style>
 {% endblock %}

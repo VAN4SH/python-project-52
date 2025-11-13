@@ -4,61 +4,218 @@
 {% load i18n %}
 
 {% block main %}
-    <h1 class="my-4">{{ header }}</h1>
-
-    <div class="card">
-        <div class="card-header bg-secondary text-white">
-            <h2>{{ task.name }}</h2>
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 fw-bold text-dark mb-2">{{ task.name }}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'tasks' %}" class="text-decoration-none">{% trans 'Tasks' %}</a></li>
+                        <li class="breadcrumb-item active text-muted">{{ task.name }}</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="btn-group">
+                <a href="{% url 'task_update' task.id %}" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>
+                    {% translate 'Update' %}
+                </a>
+                <a href="{% url 'task_delete' task.id %}" class="btn btn-outline-danger">
+                    <i class="fas fa-trash me-2"></i>
+                    {% translate 'Delete' %}
+                </a>
+            </div>
         </div>
 
-        <div class="card-body bg-light">
-            <p>{{ task.description }}</p>
-
-            <hr>
-
-            <div class="container">
-
-                <div class="row p-1">
-                    <div class="col">{% trans 'Author' %}</div>
-                    <div class="col">{{ task.author }}</div>
+        <!-- Task Details Card -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-transparent border-0 py-4">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                         style="width: 50px; height: 50px;">
+                        <i class="fas fa-tasks text-primary fa-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title mb-1">{{ task.name }}</h3>
+                        <p class="text-muted mb-0">{% trans 'Task details' %}</p>
+                    </div>
                 </div>
+            </div>
 
-                <div class="row p-1">
-                    <div class="col">{% trans 'Executor' %}</div>
-                    <div class="col">{{ task.executor }}</div>
+            <div class="card-body">
+                <!-- Description -->
+                {% if task.description %}
+                <div class="mb-5">
+                    <h5 class="text-dark mb-3">
+                        <i class="fas fa-align-left me-2 text-muted"></i>
+                        {% trans 'Description' %}
+                    </h5>
+                    <div class="bg-light rounded p-4">
+                        <p class="mb-0 text-dark">{{ task.description|linebreaksbr }}</p>
+                    </div>
                 </div>
+                {% endif %}
 
-                <div class="row p-1">
-                    <div class="col">{% trans 'Status' %}</div>
-                    <div class="col">{{ task.status }}</div>
-                </div>
+                <!-- Task Metadata -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                 style="width: 40px; height: 40px;">
+                                <i class="fas fa-user-edit text-primary"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">{% trans 'Author' %}</small>
+                                <span class="fw-semibold text-dark">{{ task.author }}</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="row p-1">
-                    <div class="col">{% trans 'Creation date' %}</div>
-                    <div class="col">{{ task.date_created|date:"d.m.Y H:i" }}</div>
-                </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                 style="width: 40px; height: 40px;">
+                                <i class="fas fa-user-check text-success"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">{% trans 'Executor' %}</small>
+                                <span class="fw-semibold text-dark">{{ task.executor|default:"—" }}</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="row p-1">
-                    <div class="col">
-                        <h6>{% trans 'Labels' %}:</h6>
-                        <ul>
-                            {% for label in task.labels.all %}
-                                <li>{{  label.name }}</li>
-                            {% endfor %}
-                        </ul>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                 style="width: 40px; height: 40px;">
+                                <i class="fas fa-list-alt text-info"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">{% trans 'Status' %}</small>
+                                <span class="badge bg-info bg-opacity-10 text-info border border-info rounded-pill px-3 py-2">
+                                    {{ task.status }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                            <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                 style="width: 40px; height: 40px;">
+                                <i class="fas fa-calendar-alt text-warning"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">{% trans 'Creation date' %}</small>
+                                <span class="fw-semibold text-dark">{{ task.date_created|date:"d.m.Y H:i" }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row p-1">
-                    <div class="col">
-                        <a href="{% url 'task_update' task.id %}" class="btn btn-sm btn-outline-dark py-0">
-                            {% translate 'Update' %}</a>
-                        <br>
-                        <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-outline-dark mt-1 py-0">
-                            {% translate 'Delete' %}</a>
+                <!-- Labels Section -->
+                {% if task.labels.all %}
+                <div class="mt-5">
+                    <h5 class="text-dark mb-3">
+                        <i class="fas fa-tags me-2 text-muted"></i>
+                        {% trans 'Labels' %}
+                    </h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for label in task.labels.all %}
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary rounded-pill px-3 py-2">
+                            <i class="fas fa-tag me-1"></i>
+                            {{ label.name }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Card Footer -->
+            <div class="card-footer bg-transparent border-0 py-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                {% trans 'Task ID' %}: {{ task.id }}
+                            </small>
+                            <div class="btn-group">
+                                <a href="{% url 'task_update' task.id %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>
+                                    {% translate 'Update' %}
+                                </a>
+                                <a href="{% url 'task_delete' task.id %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-trash me-1"></i>
+                                    {% translate 'Delete' %}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Navigation -->
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'tasks' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>
+                {% trans 'Back to tasks' %}
+            </a>
+            <div class="btn-group">
+                <a href="{% url 'task_update' task.id %}" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>
+                    {% translate 'Update' %}
+                </a>
+                <a href="{% url 'task_delete' task.id %}" class="btn btn-outline-danger">
+                    <i class="fas fa-trash me-2"></i>
+                    {% translate 'Delete' %}
+                </a>
+            </div>
+        </div>
     </div>
+</div>
+
+<style>
+.card {
+    border-radius: 16px;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+}
+
+.breadcrumb-item a {
+    color: #4361ee;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+.btn-group .btn {
+    border-radius: 8px;
+    margin: 0 2px;
+}
+
+.bg-opacity-10 {
+    opacity: 0.1;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+</style>
 {% endblock %}

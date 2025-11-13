@@ -15,33 +15,33 @@
                     <div class="col-md-6 p-5 p-lg-6">
                         <div class="mb-4">
                             <span class="badge bg-primary bg-gradient mb-3 px-3 py-2 rounded-pill">
-                                {% translate "Productivity Platform" %}
+                                {% translate "Платформа продуктивности" %}
                             </span>
                             <h1 class="display-4 fw-bold mb-3 text-dark">
-                                {% translate 'Task Manager' %}
+                                {% translate 'Менеджер задач' %}
                             </h1>
                             <p class="lead text-muted mb-4">
-                                {% translate 'Modern Django web application for efficient task management and team collaboration' %}
+                                {% translate 'Современное веб-приложение на Django для эффетивного управления задачами' %}
                             </p>
                             
                             <div class="d-flex flex-column flex-sm-row gap-3">
                                 {% if user.is_authenticated %}
                                     <a href="{% url 'users' %}" class="btn btn-primary btn-lg px-4 py-3 shadow-sm">
                                         <i class="fas fa-users me-2"></i>
-                                        {% trans 'View Users' %}
+                                        {% trans 'Пользователи' %}
                                     </a>
                                     <a href="#" class="btn btn-outline-primary btn-lg px-4 py-3">
                                         <i class="fas fa-tasks me-2"></i>
-                                        {% trans 'My Tasks' %}
+                                        {% trans 'Мои задачи' %}
                                     </a>
                                 {% else %}
                                     <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 py-3 shadow-sm">
                                         <i class="fas fa-rocket me-2"></i>
-                                        {% trans 'Get Started' %}
+                                        {% trans 'Вход' %}
                                     </a>
                                     <a href="{% url 'user_create' %}" class="btn btn-outline-primary btn-lg px-4 py-3">
                                         <i class="fas fa-user-plus me-2"></i>
-                                        {% trans 'Sign Up' %}
+                                        {% trans 'Регистрация' %}
                                     </a>
                                 {% endif %}
                             </div>
@@ -54,7 +54,7 @@
                             <div class="display-1 text-white mb-3">
                                 <i class="fas fa-check-circle"></i>
                             </div>
-                            <h3 class="text-white mb-0">{% translate "Organize. Execute. Succeed." %}</h3>
+                            <h3 class="text-white mb-0">{% translate "Организовывайте. Выполняйте. Преуспевайте." %}</h3>
                         </div>
                         
                         <!-- Background Elements -->
@@ -82,9 +82,9 @@
                         <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="fas fa-bolt text-primary fa-2x"></i>
                         </div>
-                        <h5 class="card-title">{% translate "Fast & Efficient" %}</h5>
+                        <h5 class="card-title">{% translate "Быстрота и эффективность" %}</h5>
                         <p class="card-text text-muted">
-                            {% translate "Manage your tasks quickly with our intuitive interface designed for maximum productivity." %}
+                            {% translate "Быстро управляйте своими задачами с помощью нашего интуитивно понятного интерфейса, разработанного для максимальной продуктивности." %}
                         </p>
                     </div>
                 </div>
@@ -96,9 +96,9 @@
                         <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="fas fa-users text-success fa-2x"></i>
                         </div>
-                        <h5 class="card-title">{% translate "Team Collaboration" %}</h5>
+                        <h5 class="card-title">{% translate "Комадное сотрудничество" %}</h5>
                         <p class="card-text text-muted">
-                            {% translate "Work together with your team members and assign tasks seamlessly." %}
+                            {% translate "Работайте вместе с членами вашей команды и легко распределяйте задачи." %}
                         </p>
                     </div>
                 </div>
@@ -110,9 +110,9 @@
                         <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                             <i class="fas fa-chart-line text-info fa-2x"></i>
                         </div>
-                        <h5 class="card-title">{% translate "Progress Tracking" %}</h5>
+                        <h5 class="card-title">{% translate "Отслеживание прогресса" %}</h5>
                         <p class="card-text text-muted">
-                            {% translate "Monitor your progress and stay on top of your goals with advanced analytics." %}
+                            {% translate "Следите за своим прогрессом и достигайте поставленных целей с помощью расширенной аналитики." %}
                         </p>
                     </div>
                 </div>
@@ -128,19 +128,19 @@
                         <div class="row text-center">
                             <div class="col-md-3">
                                 <div class="h2 fw-bold text-primary mb-1">0</div>
-                                <div class="text-muted">{% translate "Active Tasks" %}</div>
+                                <div class="text-muted">{% translate "Активные задачи" %}</div>
                             </div>
                             <div class="col-md-3">
                                 <div class="h2 fw-bold text-success mb-1">0</div>
-                                <div class="text-muted">{% translate "Completed" %}</div>
+                                <div class="text-muted">{% translate "Завершенные" %}</div>
                             </div>
                             <div class="col-md-3">
                                 <div class="h2 fw-bold text-info mb-1">0</div>
-                                <div class="text-muted">{% translate "In Progress" %}</div>
+                                <div class="text-muted">{% translate "В работе" %}</div>
                             </div>
                             <div class="col-md-3">
                                 <div class="h2 fw-bold text-warning mb-1">0</div>
-                                <div class="text-muted">{% translate "Pending" %}</div>
+                                <div class="text-muted">{% translate "Ожидаемые" %}</div>
                             </div>
                         </div>
                     </div>

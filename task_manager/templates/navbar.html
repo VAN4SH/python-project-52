@@ -1,40 +1,191 @@
 {% load i18n %}
 
-<nav class="navbar navbar-expand-lg navbar-light mb-3 border-bottom border-top border-dark" style="background-color: #819fd4;">
-    <a class="navbar-brand" href="{% url 'home' %}">{% translate "Task manager" %}</a>
-    <div class="collapse navbar-collapse show" id="navbarLight">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="{% url 'users' %}">{% translate "Users" %}</a>
-        </li>
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-              <a class="nav-link active" href="{% url 'statuses' %}">{% translate "Statuses" %}</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" href="{% url 'labels' %}">{% translate "Labels" %}</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" href="{% url 'tasks' %}">{% translate "Tasks" %}</a>
-          </li>
-        {% endif %}
-      </ul>
-      <ul class="navbar-nav">
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'user_update' user.id %}">{{ user.username }}</a> 
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">{% translate "Exit" %}</a>
-          </li>
-        {% else %}
-          <li class="nav-item">
-              <a class="nav-link active" href="{% url 'login' %}"">{% translate "Entrance" %}</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link active" href="{% url 'user_create' %}">{% translate "Registration" %}</a>
-          </li>
-        {% endif %}
-      </ul>
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            <i class="fas fa-tasks me-2"></i>
+            Менеджер задач
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation Items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Left Menu -->
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="{% url 'users' %}">
+                        <i class="fas fa-users me-1"></i>
+                        Пользователи
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="{% url 'statuses' %}">
+                        <i class="fas fa-list-alt me-1"></i>
+                        Статусы
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="{% url 'labels' %}">
+                        <i class="fas fa-tags me-1"></i>
+                        Метки
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="{% url 'tasks' %}">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Задачи
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <!-- Right Menu -->
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                <!-- User Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" 
+                       role="button" data-toggle="dropdown" aria-expanded="false">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                             style="width: 32px; height: 32px;">
+                            <i class="fas fa-user text-white fa-sm"></i>
+                        </div>
+                        <span class="fw-medium">{{ user.username }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userDropdown">
+                        <a class="dropdown-item d-flex align-items-center" href="{% url 'user_update' user.id %}">
+                            <i class="fas fa-user-edit me-2 text-muted"></i>
+                            Редактировать профиль
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item d-flex align-items-center text-danger" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i>
+                            Выход
+                        </a>
+                    </div>
+                </li>
+                {% else %}
+                <!-- Auth Buttons -->
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="{% url 'login' %}">
+                        <i class="fas fa-sign-in-alt me-1"></i>
+                        Вход
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-primary btn-sm rounded-pill px-3" href="{% url 'user_create' %}">
+                        <i class="fas fa-user-plus me-1"></i>
+                        Регистрация
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>
+
+<style>
+.navbar {
+    padding: 0.8rem 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    margin: 0 0.1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    color: #495057 !important;
+}
+
+.nav-link:hover {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    color: white !important;
+    transform: translateY(-1px);
+}
+
+.nav-link.active {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    color: white !important;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 80%;
+}
+
+.dropdown-menu {
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 200px;
+}
+
+.dropdown-item {
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    color: white;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        padding: 1rem 0;
+    }
+    
+    .nav-link {
+        margin: 0.2rem 0;
+        text-align: center;
+    }
+    
+    .navbar-nav .btn {
+        margin: 0.5rem 0;
+        text-align: center;
+        display: block;
+    }
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+</style>

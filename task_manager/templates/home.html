@@ -2,24 +2,201 @@
 {% load i18n %}
 {% load bootstrap4 %}
 
+{% block title %}{% translate "Task Manager - Home" %}{% endblock %}
 
 {% block main %}
-    <div class="card border border-dark">
-        <div class="card-body p-5 shadow-lg" style="background-color: #819fd4;">
-            <h1 class="my-4 display-4">{% translate 'Task manager' %}</h1>
-            <p class="lead">{% translate 'Django web application' %}</p>
-
-            <hr>
-
-            {% if user.is_authenticated %}
-                <a class="btn btn-outline-dark btn-lg" href="{% url 'users' %}">
-            {% else %}
-                <a class="btn btn-outline-dark btn-lg" href="{% url 'login' %}">
-            {% endif %}
-
-            {% trans 'Get Started' %}
-            </a>
-
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+        <!-- Hero Section -->
+        <div class="card border-0 shadow-lg overflow-hidden">
+            <div class="card-body p-0">
+                <div class="row align-items-center min-vh-50">
+                    <!-- Text Content -->
+                    <div class="col-md-6 p-5 p-lg-6">
+                        <div class="mb-4">
+                            <span class="badge bg-primary bg-gradient mb-3 px-3 py-2 rounded-pill">
+                                {% translate "Productivity Platform" %}
+                            </span>
+                            <h1 class="display-4 fw-bold mb-3 text-dark">
+                                {% translate 'Task Manager' %}
+                            </h1>
+                            <p class="lead text-muted mb-4">
+                                {% translate 'Modern Django web application for efficient task management and team collaboration' %}
+                            </p>
+                            
+                            <div class="d-flex flex-column flex-sm-row gap-3">
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'users' %}" class="btn btn-primary btn-lg px-4 py-3 shadow-sm">
+                                        <i class="fas fa-users me-2"></i>
+                                        {% trans 'View Users' %}
+                                    </a>
+                                    <a href="#" class="btn btn-outline-primary btn-lg px-4 py-3">
+                                        <i class="fas fa-tasks me-2"></i>
+                                        {% trans 'My Tasks' %}
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 py-3 shadow-sm">
+                                        <i class="fas fa-rocket me-2"></i>
+                                        {% trans 'Get Started' %}
+                                    </a>
+                                    <a href="{% url 'user_create' %}" class="btn btn-outline-primary btn-lg px-4 py-3">
+                                        <i class="fas fa-user-plus me-2"></i>
+                                        {% trans 'Sign Up' %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Visual Content -->
+                    <div class="col-md-6 bg-gradient-primary position-relative min-vh-300 d-none d-md-flex align-items-center justify-content-center">
+                        <div class="position-relative z-2 text-center p-4">
+                            <div class="display-1 text-white mb-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3 class="text-white mb-0">{% translate "Organize. Execute. Succeed." %}</h3>
+                        </div>
+                        
+                        <!-- Background Elements -->
+                        <div class="position-absolute top-0 start-0 w-100 h-100 opacity-20">
+                            <div class="position-absolute top-20 start-20">
+                                <i class="fas fa-circle text-white fa-2x"></i>
+                            </div>
+                            <div class="position-absolute bottom-30 end-20">
+                                <i class="fas fa-square text-white fa-2x"></i>
+                            </div>
+                            <div class="position-absolute top-40 end-40">
+                                <i class="fas fa-triangle text-white fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5 g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-bolt text-primary fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">{% translate "Fast & Efficient" %}</h5>
+                        <p class="card-text text-muted">
+                            {% translate "Manage your tasks quickly with our intuitive interface designed for maximum productivity." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-users text-success fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">{% translate "Team Collaboration" %}</h5>
+                        <p class="card-text text-muted">
+                            {% translate "Work together with your team members and assign tasks seamlessly." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm hover-lift">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-chart-line text-info fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">{% translate "Progress Tracking" %}</h5>
+                        <p class="card-text text-muted">
+                            {% translate "Monitor your progress and stay on top of your goals with advanced analytics." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        {% if user.is_authenticated %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="h2 fw-bold text-primary mb-1">0</div>
+                                <div class="text-muted">{% translate "Active Tasks" %}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="h2 fw-bold text-success mb-1">0</div>
+                                <div class="text-muted">{% translate "Completed" %}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="h2 fw-bold text-info mb-1">0</div>
+                                <div class="text-muted">{% translate "In Progress" %}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="h2 fw-bold text-warning mb-1">0</div>
+                                <div class="text-muted">{% translate "Pending" %}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
+</div>
+
+<style>
+.min-vh-50 {
+    min-height: 50vh;
+}
+
+.min-vh-300 {
+    min-height: 300px;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+}
+
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+.top-20 {
+    top: 20%;
+}
+
+.start-20 {
+    left: 20%;
+}
+
+.bottom-30 {
+    bottom: 30%;
+}
+
+.end-20 {
+    right: 20%;
+}
+
+.top-40 {
+    top: 40%;
+}
+
+.end-40 {
+    right: 40%;
+}
+</style>
+
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
 {% endblock %}

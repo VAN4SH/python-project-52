@@ -4,52 +4,209 @@
 {% load i18n %}
 
 {% block main %}
-    <h1 class="my-4">{{ header }}</h1>
-
-    <a class="nav-link" href="{% url 'task_create' %}">{% trans 'Create task' %}</a>
-    
-    <div class="card mb-3">
-        <div class="card-body" style="background-color: #819fd4;">
-            <form class="form-inline center" method="get">
-              {% bootstrap_form filter.form field_class="ml-2 mr-3" %}
-              {% bootstrap_button button_text button_type="submit" button_class="btn btn-outline-dark mt-3" %}
-            </form>
+<div class="row">
+    <div class="col-12">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 fw-bold text-dark mb-1">{{ header }}</h1>
+                <p class="text-muted">{% trans 'Manage your tasks efficiently' %}</p>
+            </div>
+            <a href="{% url 'task_create' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>
+                {% trans 'Create task' %}
+            </a>
         </div>
+
+        <!-- Filter Card -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-transparent border-0 py-3">
+                <h5 class="card-title mb-0 text-dark">
+                    <i class="fas fa-filter me-2 text-primary"></i>
+                    {% trans 'Filter tasks' %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form class="row g-3 align-items-end" method="get">
+                    <div class="col-md-10">
+                        <div class="row g-3">
+                            {% for field in filter.form %}
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted mb-1">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        {% bootstrap_button button_text button_type="submit" button_class="btn btn-primary w-100" %}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tasks Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4 border-0 fw-semibold text-muted small text-uppercase">ID</th>
+                                <th class="border-0 fw-semibold text-muted small text-uppercase">{% trans 'Name' %}</th>
+                                <th class="border-0 fw-semibold text-muted small text-uppercase">{% trans 'Status' %}</th>
+                                <th class="border-0 fw-semibold text-muted small text-uppercase">{% trans 'Author' %}</th>
+                                <th class="border-0 fw-semibold text-muted small text-uppercase">{% trans 'Executor' %}</th>
+                                <th class="border-0 fw-semibold text-muted small text-uppercase">{% trans 'Creation date' %}</th>
+                                <th class="pe-4 border-0 fw-semibold text-muted small text-uppercase text-end">{% trans 'Actions' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if tasks %}
+                                {% for task in tasks %}
+                                    <tr class="border-bottom">
+                                        <td class="ps-4 fw-medium text-muted">{{ task.id }}</td>
+                                        <td>
+                                            <a href="{% url 'task_show' task.id %}" class="text-decoration-none text-dark fw-medium">
+                                                <i class="fas fa-tasks me-2 text-primary"></i>
+                                                {{ task.name }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border">
+                                                {{ task.status }}
+                                            </span>
+                                        </td>
+                                        <td class="text-muted">{{ task.author }}</td>
+                                        <td class="text-muted">{{ task.executor|default:"-" }}</td>
+                                        <td class="text-muted">{{ task.date_created|date:"d.m.Y H:i" }}</td>
+                                        <td class="pe-4 text-end">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a href="{% url 'task_update' task.id %}" class="btn btn-outline-primary btn-sm px-3">
+                                                    <i class="fas fa-edit me-1"></i>
+                                                    {% translate 'Update' %}
+                                                </a>
+                                                <a href="{% url 'task_delete' task.id %}" class="btn btn-outline-danger btn-sm px-3">
+                                                    <i class="fas fa-trash me-1"></i>
+                                                    {% translate 'Delete' %}
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-5 text-muted">
+                                        <i class="fas fa-inbox fa-3x mb-3 opacity-25"></i>
+                                        <p class="h5">{% trans 'No tasks found' %}</p>
+                                        <p class="small">{% trans 'Create your first task to get started' %}</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination (optional) -->
+        {% if is_paginated %}
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <p class="small text-muted mb-0">
+                {% trans 'Showing' %} {{ page_obj.start_index }} - {{ page_obj.end_index }} {% trans 'of' %} {{ page_obj.paginator.count }} {% trans 'tasks' %}
+            </p>
+            <nav>
+                <ul class="pagination mb-0">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
     </div>
+</div>
 
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>{% trans 'Name' %}</th>
-                <th>{% trans 'Status' %}</th>
-                <th>{% trans 'Author' %}</th>
-                <th>{% trans 'Executor' %}</th>
-                <th>{% trans 'Creation date' %}</th>
-                <th></th>
-            </tr>
-        </thead>
+<style>
+.table th {
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
 
-        <tbody>
-            {% if tasks %}
-                {% for task in tasks %}
-                    <tr>
-                        <td>{{ task.id }}</td>
-                        <td><a href="{% url 'task_show' task.id %}">{{ task.name }}</a></td>
-                        <td>{{ task.status }}</td>
-                        <td>{{ task.author }}</td>
-                        <td>{{ task.executor }}</td>
-                        <td>{{ task.date_created|date:"d.m.Y H:i" }}</td>
-                        <td>
-                            <a href="{% url 'task_update' task.id %}" class="btn btn-sm btn-outline-dark py-0">
-                              {% translate 'Update' %}</a>
-                            <br>
-                            <a href="{% url 'task_delete' task.id %}" class="btn btn-sm btn-outline-dark mt-1 py-0">
-                              {% translate 'Delete' %}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+.table td {
+    border-bottom: 1px solid #f8f9fa;
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+.btn-group .btn {
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #4361ee;
+    box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15);
+}
+
+.page-link {
+    border-radius: 6px;
+    margin: 0 2px;
+    border: 1px solid #e9ecef;
+    color: #495057;
+}
+
+.page-item.active .page-link {
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    border-color: #4361ee;
+}
+
+.card {
+    border-radius: 12px;
+}
+</style>
 {% endblock %}

@@ -21,7 +21,7 @@
                                 {% translate 'Менеджер задач' %}
                             </h1>
                             <p class="lead text-muted mb-4">
-                                {% translate 'Современное веб-приложение на Django для эффетивного управления задачами' %}
+                                {% translate 'Современное веб-приложение на Django для эффективного управления задачами' %}
                             </p>
                             
                             <div class="d-flex flex-column flex-sm-row gap-3">
@@ -30,7 +30,7 @@
                                         <i class="fas fa-users me-2"></i>
                                         {% trans 'Пользователи' %}
                                     </a>
-                                    <a href="#" class="btn btn-outline-primary btn-lg px-4 py-3">
+                                    <a href="{% url 'tasks' %}" class="btn btn-outline-primary btn-lg px-4 py-3">
                                         <i class="fas fa-tasks me-2"></i>
                                         {% trans 'Мои задачи' %}
                                     </a>
